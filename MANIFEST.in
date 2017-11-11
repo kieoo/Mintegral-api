@@ -1,0 +1,2 @@
+include runtest.py
+include *.feature
