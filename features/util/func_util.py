@@ -1,27 +1,29 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #coding=utf-8
-'''
-Created on 2015年11月23日
-@deprecated: 朴素的匹配算法
-@return: 返回匹配到的字符串的首索引；如果匹配失败，则返回-1
-@author: Linked
-'''
-def matcher(dest, patt):
-    result = -1
-    n = len(dest)
-    m = len(patt)
-    for s in xrange(0, n-m+1):
-        if patt == dest[s:s+m]:
-            result = s
-            break
-    #print('Pattern %s occurs with shift %d in %s' % (patt, result, dest))
-    return result
 
-#matcher(u'上海自来水来自海上海', u'上海')
+'''
+Created on 2017年11月14日
 
-# disc = 'fa fa-android'
-# lens = len(disc)
-# for s in xrange(0, lens-6):
-#     if 'android' == disc[s:7+s]:
-#         print('good')
+@author: qyke
+'''
+
+import hashlib
+import random
+import string
+
+
+def get_user_info(cont, keys):
+
+    info_list = []
+
+    for key in keys:
+        info_list.append(cont.user_model.get(key))
+
+    return ','.join(info_list)
+
+
+def get_random_string(cont, rlen=32):
+
+    random_list = random.sample(string.ascii_letters + string.digits, rlen)  # 产生一个32长随机字符数组
+
+    return ''.join(random_list)

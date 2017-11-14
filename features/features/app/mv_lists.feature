@@ -13,34 +13,15 @@ Feature: APP模块mv_lists接口 自动化测试
   @test
   Scenario: 测试参数，app_id
     # Enter steps here
-      Given 创建APP,保存到APP.tmp
+      Given 创建APP，创建结果保存到APP_temp
       """
       {
-        user_id :
-        channel_name :
-        platform :
-        direct_market =
-        url =
-        icon =
-        primary_category =
-        secondary_category =
-        grade =
-        description =
-        custom =
-        timestamp =
-        date =
-        api =
-        status =
-        devinfo_encrypt =
-        proportion =
-        plct =
-        plctb =
-        postback = Column(String)
-        exclude_package = Column(String)
-        exclude_advertiser = Column(String)
-        campaign_fields = Column(String)
-        mtime = Column(Integer)
-        admin_user_id = Column(Integer)
+        'data':{
+            user_id : $__fun(get_user_info, 'id'),
+            channel_name : $__fun(get_random_string, 8),
+            platform : 1,
+         }
+        'return': 'APP_temp'
       }
       """
 
@@ -51,16 +32,10 @@ Feature: APP模块mv_lists接口 自动化测试
       }
       """
 
-      When 输入参数
+      When 输入参数,验证消息体
       """
       {
 
-
-        }
-      """
-      Then 验证消息体
-      """
-      {
 
         }
       """

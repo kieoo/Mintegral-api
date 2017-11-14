@@ -12,15 +12,11 @@ Created on 2017年10月31日
 
 from behave import *
 from features.model import publisher
+from features.model import app
 from features.util import md5_util
 import hashlib
 
 use_step_matcher('re')
-
-
-@given(u'创建APP')
-def req_setting(context):
-    pass
 
 
 @given(u'创建publisher')
@@ -30,34 +26,32 @@ def create_publisher(context, data):
         admin_user_id=300,
         username=data['name'],
         email=data['email'],
-        country='CN',
         passwd=md5_util.md5(data['password']),
-        cellphone='1',
-        skype='',
-        pass_salt='',
         status=1,
-        timestamp=1,
-        date=1,
-        lastlogin=1,
-        lastname='',
-        firstname='',
-        logo='',
-        company='',
-        address='',
         apikey=data['apikey'],
-        _from=0,
         mv_source_status=1,
-        resetcode='',
         system=3,
-        know='',
         api_status=1,
         permission='1,2,3,4,5'
     )
-
-    context.sql_session.insert(pub)
+    try:
+        context.user_model = context.sql_session.insert(pub, publisher.Publisher)  # 插入操作,并返回sql插入的结果数据
+    except Exception as e:
+        print e
     return
 
 
 @given(u'删除publisher')
 def del_publisher(context):
-    pass
+    context.sql_session.delete(publisher.Publisher, context.user_model.get('id', 0))
+    return
+
+
+@given(u'创建APP.*保存到(?P<app_tmp>\w+)')
+def create_app_and_save(context, app_tmp):
+    data = eval(context.text).get('data')  # 获取data数据
+    save_name = eval(context.text).get('return')  # 获取保存参数
+    my_app = app.App()
+    my_app.setApp(data)  # 设置publisher_channel表数据
+    context.app_model = {save_name: context.sql_session.insert(my_app)}
+

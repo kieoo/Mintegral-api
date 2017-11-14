@@ -18,7 +18,7 @@ import random
 import string
 
 
-def before_feature(context,feature):
+def before_all(context):
 
     context.sql_session = SqlTemplate(h=mysql_config['host'],
                                         p=mysql_config['port'],
@@ -41,7 +41,7 @@ def before_feature(context,feature):
                                      password=publisher_data['password'])
 
 
-def after_feature(context, feature):
+def after_all(context):
     pass
 
 
