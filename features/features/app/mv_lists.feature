@@ -17,10 +17,10 @@ Feature: APP模块mv_lists接口 自动化测试
       """
       {
         'data':{
-            user_id : $__fun(get_user_info, 'id'),
-            channel_name : $__fun(get_random_string, 8),
-            platform : 1,
-         }
+            'user_id' : $__fun(get_user_info, 'id'),
+            'channel_name' : '$__fun(get_random_string, 8)',
+            'platform' : 1,
+         },
         'return': 'APP_temp'
       }
       """

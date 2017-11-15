@@ -15,7 +15,6 @@ from features.config import mongo_config
 from features.dao.mongo_template import MongoTemplate
 from features.dao.sql_template import SqlTemplate
 from features.model import Base
-from features.util.common_util import object_to_dict
 
 
 
@@ -30,6 +29,7 @@ class App(Base):
     platform = Column(Integer, default=1)
     direct_market = Column(Integer, default=2)
     url = Column(String, default='')
+    confirmed_url = Column(String, default='')
     icon = Column(String, default='')
     primary_category = Column(Integer, default=0)
     secondary_category = Column(Integer, default=0)
@@ -54,6 +54,9 @@ class App(Base):
     exclude_advertiser = Column(String, default='')
     campaign_fields = Column(String, default='')
     mtime = Column(Integer, default=0)
+    configs = Column(String, default='')
+    vba_close = Column(Integer, default=2)
+    vba_option = Column(String, default='')
     admin_user_id = Column(Integer, default=1)
     is_incent = Column(Integer, default=2)
     bt_class = Column(Integer, default=0)

@@ -12,6 +12,7 @@ Created on 2017年11月14日
 '''
 
 import re
+from features.util import func_util
 
 func_re = re.compile(r'\$__fun\((?P<func_name>\w+),(?P<func_param>.*?)\)')
 
@@ -20,8 +21,9 @@ class HandleDate(object):
     def __init__(self, context):
         self.datas_original_str = context.text
         self.datas_rel = ''
-        self.transfuc()
         self.handle_context = context
+        self.transfuc()
+
 
     def transfuc(self):
         """
@@ -44,7 +46,11 @@ class HandleDate(object):
             :type param: list, param
             :rtype : string
         """
-        func_name = name
-        func_param_list = param.split(',')
+        func_name = getattr(func_util, name)
+        func_param_tp = eval(param)
+        if not isinstance(func_param_tp, tuple):
+            func_param_tp = (func_param_tp, )
+        return func_name(self.handle_context, *func_param_tp)
 
-        return func_name(cont=self.handle_context, *func_param_list)
+    def text_eval(self):
+        return eval(self.datas_rel)

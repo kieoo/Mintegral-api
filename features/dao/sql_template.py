@@ -106,8 +106,9 @@ class SqlTemplate(object):
             self.session.commit()
             result = 1
             if return_data:
-                data_id = self.session.execute('SELECT LAST_INSERT_ID()').first()
-                result = self.selectOne(class_or_type_or_tuple, data_id)
+                data_id = self.session.execute('SELECT LAST_INSERT_ID()').first()[0]
+                user_info = self.selectOne(class_or_type_or_tuple, {'id': data_id})
+                return user_info
         except Exception, e:
             self.session.rollback()
             print e

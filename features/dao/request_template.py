@@ -37,10 +37,13 @@ class RequestTemplate:
         self.opener.addheaders = self.header
         try:
             response = self.opener.open(login_url, post_data)
-            code = re.search(r'code=(\S+)', response.url).group(1)  # 获取登录code
+            code_match = re.search(r'code=(\S+)', response.url)  # 获取登录code
+            code = ''
+            if code_match:
+                code = code_match.group(1)
         except Exception as e:
             print('login error!')
-            raise e
+            raise(e)
         else:
             if code:
                 access_url = '{0}://{1}{2}'.format(l_pro, self.host, l_path['token_url'])
