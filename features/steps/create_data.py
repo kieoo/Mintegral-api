@@ -68,3 +68,10 @@ def del_publisher(context):
     context.sql_session.delete(app.App, data)
     return
 
+@given(u'数据准备.*保存到(?P<tmp_table>\w+)')
+@given(u'准备数据.*保存到(?P<tmp_table>\w+)')
+def create_data_and_save(context, tmp_table):
+    h_data = HandleData(context)
+    data = h_data.text_eval().get('data') or h_data.text_eval().get('Data')  # 获取data数据
+    save_name = h_data.text_eval().get('save') or h_data.text_eval().get('Save')  # 获取保存参数
+    context.save_model[save_name] = data

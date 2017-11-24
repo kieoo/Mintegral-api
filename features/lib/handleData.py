@@ -16,7 +16,7 @@ import re
 from features.util import func_util
 
 func_re = re.compile(r'\$__fun\((?P<func_name>\w+),(?P<func_param>.*?)\)', re.I)
-
+param_re = re.compile(r'\$\{(?P<save_name>[A-Za-z0-9]+)\.(?P<save_key>[A-Za-z0-9]+)\}')
 
 class HandleData(object):
 
@@ -26,6 +26,7 @@ class HandleData(object):
         self.handle_context = context
         self.check_ini_data()  # TODO
         self.transfuc()
+        self.tansparam()
 
     def text_eval(self):
         try:
@@ -45,6 +46,22 @@ class HandleData(object):
                 func_list = func.groupdict()
                 func_value = self.func_exec(func_list['func_name'], func_list['func_param'])
                 data = func_re.sub(str(func_value), data, 1)    # 每次替换一个$__func() 为
+            self.datas_rel += data + '\n'   # 拼装回text
+
+        return
+
+    def transparam(self):
+        """
+        匹配context data 中 ${}, 拼装回text
+        :return:
+        """
+        for data in self.datas_original_str.split('\n'):
+            ma = param_re.finditer(data)     # 匹配每行$__func()
+            for param in ma:                 # 匹配行内每个$__func()
+                param_list = param.groupdict()
+                param_value = self.func_exec('get_save_info',
+                                             param_list['save_name']+','+param_list['save_key'])  # TODO
+                data = param_re.sub(str(param_value), data, 1)    # 每次替换一个$__func() 为
             self.datas_rel += data + '\n'   # 拼装回text
 
         return

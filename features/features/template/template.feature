@@ -19,7 +19,14 @@ Scenario: [1-1-1]template
   When 输入参数
   """
   {
+   Input:{
+      # 参数化两种格式
+      id : $__fun(get_save_info, 'app_temp_appid', 'id'), # 参数化
+      test : ${app_temp_appid.id} # 参数化
+    }
+   Output:{
 
+      }
     }
   """
   Then 输入参数xxx，验证返回

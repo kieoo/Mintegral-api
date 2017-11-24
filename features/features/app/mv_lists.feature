@@ -99,13 +99,13 @@ Feature: APP模块mv_lists接口 自动化测试
   @finish
   Scenario: 测试参数，app_id不合法，返回错误信息
     # Enter steps here
-      Given 创建临时tmp_table，结果保存到temp_appid
+      Given 准备数据:app_id，保存到tmp_table
       """
       {
         'Data':{
           'app_id':['test', 'test_9999', '1234_test']
         },
-        'Save': 'temp_appid',
+        'Save': 'tmp_table',
       }
       """
 
@@ -115,7 +115,7 @@ Feature: APP模块mv_lists接口 自动化测试
         'Request_url': '/app/mv_lists',
         'Method' : 'POST',
         'Input':{
-          'app_id': $__fun(get_save_info, 'temp_appid', 'app_id'),,
+          'app_id': ${tmp.app_id},
         },
 
         'Output':{
