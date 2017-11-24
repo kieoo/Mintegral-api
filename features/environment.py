@@ -47,8 +47,6 @@ def before_all(context):
                                          path=login_account['path'],
                                          email=publisher_data['email'],
                                          password=publisher_data['password'])
-    # 声明一个公有dict，供用例存储数据
-    context.save_model = dict()
 
 
 def after_all(context):  # TODO
@@ -62,11 +60,13 @@ def before_feature(context, feature):
 
 
 def before_scenario(context, scenario):  # TODO
-    pass
+    # 声明一个公有dict，供用例存储数据
+    context.save_model = {}
+    context.step_cycle = 0
 
 
 def after_scenario(context, scenario):  # TODO
-    pass
+    context.save_model.clear()
 
 
 

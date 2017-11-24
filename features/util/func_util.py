@@ -38,4 +38,14 @@ def get_save_info(context, attr, key):
 
     info = context.save_model.get(attr)
 
+    if isinstance(info, dict):
+
+        if isinstance(info.get(key), list):
+
+            index = context.step_cycle if context.step_cycle < len(info.get(key))-1 else len(info.get(key))-1
+
+            return info.get(key)[index]
+
+        return info.get(key)
+
     return getattr(info, key)

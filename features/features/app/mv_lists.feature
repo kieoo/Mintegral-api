@@ -96,7 +96,7 @@ Feature: APP模块mv_lists接口 自动化测试
       """
 #-----------------------------------------------
   @/app/mv_lists
-  @finish
+  @test
   Scenario: 测试参数，app_id不合法，返回错误信息
     # Enter steps here
       Given 准备数据:app_id，保存到tmp_table
@@ -109,13 +109,15 @@ Feature: APP模块mv_lists接口 自动化测试
       }
       """
 
-      When 输入参数app_id=99999，验证返回为空
+      When 输入参数app_id=${tmp_table.app_id}，验证返回为空 X3
       """
       {
         'Request_url': '/app/mv_lists',
         'Method' : 'POST',
         'Input':{
-          'app_id': ${tmp.app_id},
+          'user' : $__fun(get_user_info, 'id'),
+          'tset' : $__fun(get_random_string, 5),
+          'app_id': ${tmp_table.app_id},
         },
 
         'Output':{
