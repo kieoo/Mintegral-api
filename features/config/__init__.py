@@ -7,19 +7,23 @@ Create On 2015年11月1日
 @deprecated: 全局配置表
 """
 
-"""
-@deprecated: login_step函数配置参数 
-"""
+# -------------------- 测试脚本配置 ---------------------
+DEBUG = 1
+SCENARIO_RETRY = 1  # 用例失败重试次数
+HTTP_TIMEOUT = 5  # 接口超时时间 second
+
+# -------------------- 权限配置 -------------------------
+
 login_account = {
                  'host': 'qyke-dev.mintegral.net',
                  'email_temp': '@mobvista.com',
                  'password': '1',
                  'path': {
                      'login_url': '/user/verify',
-                     'token_url': '/login/access_token'},
+                     'token_url': '/login/access_token'},  # 路径头 加 '/' 不加 '/' 都可
                  }
 
-########################### 数据库配置 ######################################
+# -------------------- 数据库配置 -------------------------
                                                                                                                                                                                                              
 mysql_config = {
                 'username':'root',

@@ -10,7 +10,7 @@ Scenario: [1-1-1]template
 
      }
   """
-  Given 请求头
+  Given 请求设置
   """
     {
 
@@ -22,19 +22,18 @@ Scenario: [1-1-1]template
 
     }
   """
-  Then 验证头信息
+  Then 输入参数xxx，验证返回
   """
   {
-      'cookies': re'\s+',
     }
   """
-  Then 验证消息体
+  Then 检查MySql
   """
   {
 
     }
   """
-  Then 检查MySql
+  Then 检查mongo
   """
   {
 

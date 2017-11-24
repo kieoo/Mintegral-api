@@ -7,23 +7,33 @@ Created on 2017年11月14日
 
 @author: qyke
 
-处理输入数据
+处理features用例数据 类
 
 '''
+
 
 import re
 from features.util import func_util
 
-func_re = re.compile(r'\$__fun\((?P<func_name>\w+),(?P<func_param>.*?)\)')
+func_re = re.compile(r'\$__fun\((?P<func_name>\w+),(?P<func_param>.*?)\)', re.I)
 
-class HandleDate(object):
+
+class HandleData(object):
 
     def __init__(self, context):
         self.datas_original_str = context.text
         self.datas_rel = ''
         self.handle_context = context
+        self.check_ini_data()  # TODO
         self.transfuc()
 
+    def text_eval(self):
+        try:
+            datas_dict = eval(self.datas_rel)
+        except Exception as e:
+            print('Incorrect Dict Format=> ' + self.datas_rel)
+            raise e
+        return datas_dict
 
     def transfuc(self):
         """
@@ -41,10 +51,10 @@ class HandleDate(object):
 
     def func_exec(self, name, param):
         """
-            执行context data中$__func()，返回values
-            :type name: string, function name
-            :type param: list, param
-            :rtype : string
+        执行context data中$__func()，返回values
+        :param name: string, function name
+        :param param: list, param
+        :return: string
         """
         func_name = getattr(func_util, name)
         func_param_tp = eval(param)
@@ -52,5 +62,6 @@ class HandleDate(object):
             func_param_tp = (func_param_tp, )
         return func_name(self.handle_context, *func_param_tp)
 
-    def text_eval(self):
-        return eval(self.datas_rel)
+    def check_ini_data(self):
+        pass
+
