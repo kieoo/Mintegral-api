@@ -12,6 +12,7 @@ Created on 2017年10月31日
 
 from behave import use_step_matcher, given
 from features.model import publisher, app
+from features.model import Base
 from features.util import md5_util
 from features.lib.handleData import HandleData
 from features.config import *
@@ -51,26 +52,35 @@ def del_publisher(context):
     return
 
 
-@given(u'创建.*app.*保存到(?P<app_tmp>\w+)')
+@given(u'准备MYSQL数据.*保存到(?P<app_tmp>\w+)')
 def create_app_and_save(context, app_tmp):
     h_data = HandleData(context)
-    data = h_data.text_eval().get('data') or h_data.text_eval().get('Data')  # 获取data数据
-    save_name = h_data.text_eval().get('save') or h_data.text_eval().get('Save') # 获取保存参数
-    my_app = app.App()
-    my_app.setApp(data)  # 设置publisher_channel表数据
-    context.save_model[save_name] = context.sql_session.insert_ex(my_app, app.App)
+    data_dict = h_data.text_eval()
+    model = data_dict.get('Model')
+    data_dict.pop('Model')
+    for key, values in data_dict:
+        model_class = Base.__subclasses__()
+        model_class.setApp(values)  # 设置publisher_channel表数据
+        context.save_model[key] = context.sql_session.insert_ex(model_class, Base.__subclasses__())
 
 
-@given(u'删除app')
+@given(u'[准备数据|数据准备].*删除.*')
 def del_publisher(context):
     h_data = HandleData(context)
     data = h_data.text_eval().get('data') or h_data.text_eval().get('Data') # 获取data数据
     context.sql_session.delete(app.App, data)
     return
 
-@given(u'数据准备.*保存到(?P<tmp_table>\w+)')
-@given(u'准备数据.*保存到(?P<tmp_table>\w+)')
-def create_data_and_save(context, tmp_table):
+
+@given(u'准备数据.*创建.*')
+def create_data_and_save(context, tmp_table='tmp'):
+    h_data = HandleData(context)
+    data = h_data.text_eval().get('data') or h_data.text_eval().get('Data')  # 获取data数据
+    save_name = h_data.text_eval().get('save') or h_data.text_eval().get('Save')  # 获取保存参数
+    context.save_model[save_name] = data
+
+
+def create_data_and_save_new(context, tmp_table='tmp'):
     h_data = HandleData(context)
     data = h_data.text_eval().get('data') or h_data.text_eval().get('Data')  # 获取data数据
     save_name = h_data.text_eval().get('save') or h_data.text_eval().get('Save')  # 获取保存参数

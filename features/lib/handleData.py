@@ -14,9 +14,10 @@ Created on 2017年11月14日
 
 import re
 from features.util.func_util import *
+from features.model.app import App
 
 func_re = re.compile(r'\$__fun\((?P<func_name>\w+),(?P<func_param>.*?)\)', re.I)
-param_re = re.compile(r'\$\{(?P<save_name>[A-Za-z0-9_]+)\.(?P<save_key>[A-Za-z0-9_]+)\}')
+param_re = re.compile(r'\$\{(?P<save_key>[A-Za-z0-9_]+)\}')
 
 
 class HandleData(object):
@@ -66,7 +67,6 @@ class HandleData(object):
                 #                             '"'+param_list['save_name']+'","'+param_list['save_key']+'"')
                 param_value = u'{0}({1},{2})'.format('get_save_info',
                                                      'self.handle_context',
-                                                     "'" + param_list['save_name'] + "',"
                                                      "'" + param_list['save_key']+"'")
                 data = param_re.sub(str(param_value), data, 1)    # 每次替换一个$__func() 为
             trans_tmp += data + '\n'   # 拼装回text

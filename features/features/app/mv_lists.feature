@@ -20,18 +20,23 @@ Feature: APP模块mv_lists接口 自动化测试
   """
 #-----------------------------------------------
   @/app/mv_lists
-  @finish
+  @test
   Scenario: 测试参数，app_id存在，返回app信息
     # Enter steps here
-      Given 创建随机app，结果保存到app_temp_appid
+      Given 准备MYSQL数据:创建随机两个app，结果保存到app_temp
       """
       {
-        'Data':{
-            'user_id' : $__fun(get_user_info, 'id'),
-            'channel_name' : 'mv_lists_test_appid',
-            'platform' : 1,
-         },
-        'Save': 'app_temp_appid',
+        'Model': 'App',
+        'app_temp1':{
+                'user_id': $__fun(get_user_info, 'id'),
+                'channel_name': $__fun(get_random_string, 5),
+                'platform' : 1,
+        },
+        'app_temp2':{
+                'user_id': $__fun(get_user_info, 'id'),
+                'channel_name': $__fun(get_random_string, 5),
+                'platform' : 2,
+        },
       }
       """
 
@@ -41,7 +46,7 @@ Feature: APP模块mv_lists接口 自动化测试
         'Request_url': '/app/mv_lists',
         'Method' : 'POST',
         'Input':{
-          'app_id': $__fun(get_save_info, 'app_temp_appid', 'id'),
+          'app_id': $__fun(get_save_info, 'app_temp1', 'id'),
         },
 
         'Output':{
@@ -51,8 +56,8 @@ Feature: APP模块mv_lists接口 自动化测试
               'total': 1,
               "page":1,
               "lists":[{
-                'app_id' : $__fun(get_save_info, 'app_temp_appid', 'id'),
-                'app_name' : 'mv_lists_test_appid',
+                'app_id' : $__fun(get_save_info, 'app_temp1', 'id'),
+                'app_name' :  $__fun(get_save_info, 'app_temp', 'channel_name'),
                 'platform' : 1,
                 'ad_unit': 0,
               }]
@@ -65,12 +70,16 @@ Feature: APP模块mv_lists接口 自动化测试
   @finish
   Scenario: 测试参数，app_id不存在，返回app信息
     # Enter steps here
-      Given 删除app
+      Given 准备数据:删除app
       """
       {
-        'Data':{
-            'id' : 99999,
-         },
+        'Model': 'App',
+        'Data1':{
+                'id': 99999,
+        },
+        'Data2':{
+                'id': 99998,
+        },
       }
       """
 
@@ -96,16 +105,14 @@ Feature: APP模块mv_lists接口 自动化测试
       """
 #-----------------------------------------------
   @/app/mv_lists
-  @test
   Scenario: 测试参数，app_id不合法，返回错误信息
     # Enter steps here
-      Given 准备数据:app_id，保存到tmp_table
+      Given 准备数据:创建app_id列表
       """
       {
         'Data':{
           'app_id':['test', 'test_9999', '1234_test']
-        },
-        'Save': 'tmp_table',
+        }
       }
       """
 
@@ -117,7 +124,7 @@ Feature: APP模块mv_lists接口 自动化测试
         'Input':{
           'user' : $__fun(get_user_info, 'id'),
           'tset' : $__fun(get_random_string, 5),
-          'app_id': ${tmp_table.app_id},
+          'app_id': ${app_id},
         },
 
         'Output':{
