@@ -80,12 +80,12 @@ class App(Base):
     def __repr__(self):
         return "<APP(user_id='%d', channel_name='%s', status='%d')>"\
                    % (self.user_id, self.channel_name, self.status)
-    
+
     
     def setApp(self, appDict):
         for (k, v) in appDict.iteritems():
             setattr(self, k, v)
-    
+
     
 ##########################################################
 # session = SqlTemplate()

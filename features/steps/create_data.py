@@ -12,7 +12,7 @@ Created on 2017年10月31日
 
 from behave import use_step_matcher, given
 from features.model import publisher, app
-from features.model import Base
+from features.model import *
 from features.util import md5_util
 from features.lib.handleData import HandleData
 from features.config import *
@@ -56,12 +56,19 @@ def del_publisher(context):
 def create_app_and_save(context, app_tmp):
     h_data = HandleData(context)
     data_dict = h_data.text_eval()
-    model = data_dict.get('Model')
+    model_name = data_dict.get('Model')
     data_dict.pop('Model')
-    for key, values in data_dict:
-        model_class = Base.__subclasses__()
-        model_class.setApp(values)  # 设置publisher_channel表数据
-        context.save_model[key] = context.sql_session.insert_ex(model_class, Base.__subclasses__())
+    model = 0
+    model_class_list = Base.__subclasses__()    # model父类的所有子类， 注意 需要调用的子类都要 import
+
+    for model_class in model_class_list:  # 遍历Base model子集，声明数据表model对象，并插入数据
+        if model_name == getattr(model_class, '__name__'):  # 如果类名与 需要调用的一致，执行操作
+            for key, values in data_dict.iteritems():
+                model = model_class()
+                getattr(model, 'set'+model_name)(values)
+                context.save_model[key] = context.sql_session.insert_ex(model, model_class)
+    if not model:
+        raise Exception('Model name Error')
 
 
 @given(u'[准备数据|数据准备].*删除.*')
@@ -73,15 +80,8 @@ def del_publisher(context):
 
 
 @given(u'准备数据.*创建.*')
-def create_data_and_save(context, tmp_table='tmp'):
+def create_data_and_save(context):
     h_data = HandleData(context)
     data = h_data.text_eval().get('data') or h_data.text_eval().get('Data')  # 获取data数据
-    save_name = h_data.text_eval().get('save') or h_data.text_eval().get('Save')  # 获取保存参数
-    context.save_model[save_name] = data
+    context.save_model['Tmp_Data'] = data
 
-
-def create_data_and_save_new(context, tmp_table='tmp'):
-    h_data = HandleData(context)
-    data = h_data.text_eval().get('data') or h_data.text_eval().get('Data')  # 获取data数据
-    save_name = h_data.text_eval().get('save') or h_data.text_eval().get('Save')  # 获取保存参数
-    context.save_model[save_name] = data

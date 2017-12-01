@@ -20,7 +20,6 @@ Feature: APP模块mv_lists接口 自动化测试
   """
 #-----------------------------------------------
   @/app/mv_lists
-  @test
   Scenario: 测试参数，app_id存在，返回app信息
     # Enter steps here
       Given 准备MYSQL数据:创建随机两个app，结果保存到app_temp
@@ -57,7 +56,7 @@ Feature: APP模块mv_lists接口 自动化测试
               "page":1,
               "lists":[{
                 'app_id' : $__fun(get_save_info, 'app_temp1', 'id'),
-                'app_name' :  $__fun(get_save_info, 'app_temp', 'channel_name'),
+                'app_name' :  $__fun(get_save_info, 'app_temp1', 'channel_name'),
                 'platform' : 1,
                 'ad_unit': 0,
               }]
@@ -105,6 +104,7 @@ Feature: APP模块mv_lists接口 自动化测试
       """
 #-----------------------------------------------
   @/app/mv_lists
+  @test
   Scenario: 测试参数，app_id不合法，返回错误信息
     # Enter steps here
       Given 准备数据:创建app_id列表
@@ -116,15 +116,13 @@ Feature: APP模块mv_lists接口 自动化测试
       }
       """
 
-      When 输入参数app_id=${tmp_table.app_id}，验证返回为空 X3
+      When 输入参数app_id=${app_id}，验证返回为空 X3
       """
       {
         'Request_url': '/app/mv_lists',
         'Method' : 'POST',
         'Input':{
-          'user' : $__fun(get_user_info, 'id'),
-          'tset' : $__fun(get_random_string, 5),
-          'app_id': ${app_id},
+          'app_id': ${Tmp_Data.app_id},
         },
 
         'Output':{
