@@ -84,7 +84,6 @@ class Offer(Base):
         return "<Offer(id='%d', name='%s', app_name='%s', status='%d')>"\
                    % (self.id, self.name, self.app_name, self.status)
 
-
     def setOffer(self, offerDict):
         for (k, v) in offerDict.iteritems():
             setattr(self, k, v)

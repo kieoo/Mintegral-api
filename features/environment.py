@@ -1,25 +1,23 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-#coding=utf-8
+# coding=utf-8
+
 """
 @deprecated: 全局脚本
-@author: Linked
-@since: 2015-09-01
-@author: Linked
-"""
+@author: qyke
+@since: 2017-11-01
 
-from features.config import mongo_config
-from features.dao.mongo_template import MongoTemplate
+"""
 from features.dao.sql_template import SqlTemplate
 from features.dao.request_template import RequestTemplate
-from features.config import login_account, mysql_config
+from features.config import *
 from features.steps import create_data
 import random
 import string
+from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
 
 
-def before_feature(context,feature):
-
+def before_all(context):
+    # 持久化数据库
     context.sql_session = SqlTemplate(h=mysql_config['host'],
                                         p=mysql_config['port'],
                                         u=mysql_config['username'],
@@ -27,32 +25,48 @@ def before_feature(context,feature):
 
     random_list = random.sample(string.ascii_letters + string.digits, 32)  # 产生一个32长随机字符数组
 
+    # 持久化http接口（访问权限）
     publisher_data = dict()
     publisher_data['name'] = ''.join(random_list)
     publisher_data['email'] = publisher_data['name'] + login_account['email_temp']
     publisher_data['password'] = login_account['password']
     publisher_data['apikey'] = publisher_data['name']
 
-    create_data.create_publisher(context, publisher_data)  # 创建publisher
+    # 创建publisher
+    create_data.create_publisher(context, publisher_data)
 
-    context.opener = RequestTemplate(host=login_account['host'],
-                                     path=login_account['path'],
-                                     email=publisher_data['email'],
-                                     password=publisher_data['password'])
+    if DEBUG:
+
+        context.opener = RequestTemplate(host=login_account['host'],
+                                         path=login_account['path'],
+                                         email='a3t8TC1wJylpgrUBiZLP2zoj6neSGb0A@mobvista.com',
+                                         password='1')
+    else:
+
+        context.opener = RequestTemplate(host=login_account['host'],
+                                         path=login_account['path'],
+                                         email=publisher_data['email'],
+                                         password=publisher_data['password'])
 
 
-def after_feature(context, feature):
+def after_all(context):  # TODO
     pass
 
 
+def before_feature(context, feature):
+    for scenario in feature.scenarios:
+        if 'autoretry' in scenario.effective_tags:
+            patch_scenario_with_autoretry(scenario, max_attempts=SCENARIO_RETRY)
 
-def before_scenario(context, scenario):
-    pass
+
+def before_scenario(context, scenario):  # TODO
+    # 声明一个公有dict，供用例存储数据
+    context.save_model = {}
+    context.step_cycle = 0
 
 
-
-def after_scenario(context, scenario):
-    pass
+def after_scenario(context, scenario):  # TODO
+    context.save_model.clear()
 
 
 

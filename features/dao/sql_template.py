@@ -89,6 +89,30 @@ class SqlTemplate(object):
             self.session.rollback()
             print e
         return result
+
+    """
+    @deprecated: 插入一条记录, 并返回sql插入的结果数据
+    @author: qyke
+    @since: 2017-11-14
+    @param obj: 新增的记录对应的model对象 
+    @return: 成功返回所有记录信息, 失败返回0
+    
+    """
+    def insert_ex(self, obj, class_or_type_or_tuple, return_data=1):
+        result = 0
+        try:
+            self.session.begin()
+            self.session.add(obj)
+            self.session.commit()
+            result = 1
+            if return_data:
+                data_id = self.session.execute('SELECT LAST_INSERT_ID()').first()[0]
+                user_info = self.selectOne(class_or_type_or_tuple, {'id': data_id})
+                return user_info
+        except Exception, e:
+            self.session.rollback()
+            print e
+        return result
     
     
     """
