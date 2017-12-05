@@ -39,7 +39,7 @@ Scenario: [1-1-1]template
   """
   {
     'Data':{
-         'app_id':['test', 'test_9999', '1234_test']           # 保存 ['test', 'test_9999', '1234_test'] 到 app_id
+         'app_id':['test', 'test_9999', '1234_test']           # 保存 ['test', , ] 到 app_id
     }
   }
   """
@@ -53,7 +53,7 @@ Scenario: [1-1-1]template
       'id' : ${save_name.id}                                     # 参数化 等价 上面的 $__fun(get_save_info
       'test_id' : ${app_id}                                      # 默认存在Tmp_Data中 =  ${Tmp_Data.app_id}
     }
-   'Output':{
+   'Output':{                                                    # 必须和返回的body 一致
 
       }
     }
