@@ -1,7 +1,12 @@
 # new feature
 # Tags: optional
 
-Feature: hehave learn TEST
+@autoretry
+Feature: test features template.feature
+"""
+# TAG:  Feature or Scenario/ScenarioOutline with @autoretry
+# NOTE: If you tag the feature, all its scenarios are retried.
+"""
 """
   内置key名：
   'Model'
@@ -35,6 +40,7 @@ Scenario: [1-1-1]template
   }
   """
   When 输入参数，验证返回 X3
+  # 循环执行 3 次
   """
   {
    'Input':{

@@ -78,13 +78,13 @@ class HandleData(object):
         return
 
     def func_exec(self, name, param):
-        from features.util import func_util
         """
         执行context data中$__func()，返回values
         :param name: string, function name
         :param param: list, param
         :return: string
         """
+        from features.util import func_util
         func_name = getattr(func_util, name)
         func_param_tp = eval(param)
         if not isinstance(func_param_tp, tuple):

@@ -32,7 +32,7 @@ def create_app_and_save(context):
         if model_name == getattr(model_class, '__name__'):  # 如果类名与 需要调用的一致，执行操作
             for key, values in data_dict.iteritems():
                 model = model_class()
-                getattr(model, 'set'+model_name)(values)
+                getattr(model, 'set'+model_name)(values)  # 获取set+model_name 的model类方法
                 context.save_model[key] = context.sql_session.insert_ex(model, model_class)
     if not model:
         raise Exception('Model name Error')
@@ -67,6 +67,7 @@ def del_publisher(context):
 
 # -------------------------------------------------------------------------------------------------------------
 
+
 @given(u'创建publisher')
 def create_publisher(context, data):
 
@@ -92,6 +93,7 @@ def create_publisher(context, data):
         print('create user error')
         raise e
     return
+
 
 @given(u'删除publisher')
 def del_publisher(context):
