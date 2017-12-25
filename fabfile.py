@@ -6,9 +6,9 @@ from fabric.api import env, sudo, cd, run, local, put  #@UnresolvedImport
 
 # ssh user
 env.user = "root"
-env.hosts = ["52.74.240.202"]
+env.hosts = ["52.74.116.89"]
 
-APP_ROOT = '/data/MsystemPortalTest'
+APP_ROOT = '/data/Mintegral_API_Test'
 
 def bootstrap():
     sudo('mkdir -p %s' % APP_ROOT)

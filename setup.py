@@ -5,7 +5,7 @@
 from setuptools import find_packages, setup
 
 setup( 
-    name="Mintegral-apiTest",
+    name="Mintegral_API_Test",
     version="1.0",
     long_description=__doc__,
     packages=find_packages(),
