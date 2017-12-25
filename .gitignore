@@ -50,4 +50,5 @@ Thumbs.db
 venv
 reports
 m-system.egg-info
-*.idea
+.idea
+.idea/
