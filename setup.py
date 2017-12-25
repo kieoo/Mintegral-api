@@ -13,7 +13,7 @@ setup(
     zip_safe=False,
     install_requires=[
                         'behave>=1.2.5',
-                        # 'MySQL-python>=1.2.5',
+                        'PyMySql>=0.7.1',
                         'paramiko>=1.15.2',
                         'pycrypto>=2.6.1',
                         'PyHamcrest>=1.8.2',
